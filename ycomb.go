@@ -5,12 +5,18 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gocolly/colly/v2"
 )
 
 func main() {
+	// Ensure data directory exists
+	if err := os.MkdirAll("data", 0755); err != nil {
+		log.Fatal("Failed to create data directory:", err)
+	}
+
 	// Create a new collector
 	c := colly.NewCollector(
 		colly.AllowedDomains("news.ycombinator.com"),
@@ -51,8 +57,8 @@ func main() {
 	}
 
 	// Create filename with current date using relative path
-	filename := fmt.Sprintf("data/articles_%s.json", 
-		time.Now().Format("2006-01-02"))
+	filename := filepath.Join("data", fmt.Sprintf("articles_%s.json", 
+		time.Now().Format("2006-01-02")))
 
 	// Write to file in data directory
 	err = os.WriteFile(filename, jsonData, 0644)
@@ -60,6 +66,5 @@ func main() {
 		log.Fatal("Error writing JSON file:", err)
 	}
 
-	fmt.Printf("Data saved to %s\n", filename)
-	fmt.Println("Scraping Done!")
+	log.Printf("Successfully scraped %d articles and saved to %s\n", len(articles), filename)
 }

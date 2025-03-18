@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gocolly/colly/v2"
 )
@@ -49,12 +50,16 @@ func main() {
 		log.Fatal("Error converting to JSON:", err)
 	}
 
-	// Write to file
-	err = os.WriteFile("articles.json", jsonData, 0644)
+	// Create filename with current date using relative path
+	filename := fmt.Sprintf("data/articles_%s.json", 
+		time.Now().Format("2006-01-02"))
+
+	// Write to file in data directory
+	err = os.WriteFile(filename, jsonData, 0644)
 	if err != nil {
 		log.Fatal("Error writing JSON file:", err)
 	}
 
-	fmt.Println("Data saved to articles.json")
+	fmt.Printf("Data saved to %s\n", filename)
 	fmt.Println("Scraping Done!")
 }

@@ -1,4 +1,4 @@
-module github.com/yourusername/go-web-scraper
+module github.com/arxchrono/go-web-scraper
 
 go 1.24.1
 

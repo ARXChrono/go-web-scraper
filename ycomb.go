@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gocolly/colly/v2"
 )
@@ -41,5 +43,18 @@ func main() {
 		fmt.Printf("Title: %s\nLink: %s\n\n", article["title"], article["link"])
 	}
 
+	// Convert to JSON
+	jsonData, err := json.MarshalIndent(articles, "", "  ")
+	if err != nil {
+		log.Fatal("Error converting to JSON:", err)
+	}
+
+	// Write to file
+	err = os.WriteFile("articles.json", jsonData, 0644)
+	if err != nil {
+		log.Fatal("Error writing JSON file:", err)
+	}
+
+	fmt.Println("Data saved to articles.json")
 	fmt.Println("Scraping Done!")
 }
